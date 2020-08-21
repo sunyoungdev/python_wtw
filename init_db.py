@@ -10,23 +10,22 @@ just_watch = JustWatch(country='KR')
 
 results_full = just_watch.search_for_item(
     providers=['nfx', 'prv', 'wav', 'wac', 'nvs', 'ply'],
-    content_types=['movie']
+    content_types=['movie'],
+    page_size=110
 )
 
-# film_items = results_full['items']
-#
-# for film_item in film_items:
-#     title = film_item['title']
-#     path = film_item['full_path']
-#
-#     doc = {
-#         'title': title,
-#         'path': path
-#     }
-#
-#     db.film_list.insert_one(doc)
-#     print('완료', title)
+film_items = results_full['items']
 
-print(results_full)
+for film_item in film_items:
+    title = film_item['title']
+    path = film_item['full_path']
 
+    doc = {
+        'title': title,
+        'path': path
+    }
 
+    db.film_list.insert_one(doc)
+    print('완료', title)
+
+# print(results_full)
