@@ -6,119 +6,185 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="title" content="Where To Watch">
-	<link rel="canonical" href="#">
+    <link rel="canonical" href="#">
 
-	<meta property="og:site_name" content="Where To Watch">
-	<meta property="og:type" content="website">
-	<meta name="twitter:card" content="summary">
+    <meta property="og:site_name" content="Where To Watch">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
 
-	<meta itemprop="url" content="#">
-	<meta property="og:url" content="#">
-	<meta name="twitter:url" content="#">
+    <meta itemprop="url" content="#">
+    <meta property="og:url" content="#">
+    <meta name="twitter:url" content="#">
 
-	<meta itemprop="image" content="#">
-	<meta property="og:image" content="#">
-	<meta name="twitter:image" content="#">
+    <meta itemprop="image" content="#">
+    <meta property="og:image" content="#">
+    <meta name="twitter:image" content="#">
 
-	<meta itemprop="name" content="Where To Watch">
-	<meta property="og:title" content="Where To Watch">
-	<meta name="twitter:title" content="Where To Watch">
+    <meta itemprop="name" content="Where To Watch">
+    <meta property="og:title" content="Where To Watch">
+    <meta name="twitter:title" content="Where To Watch">
 
-	<meta property="og:description" content="">
-	<meta name="twitter:description" content="">
+    <meta property="og:description" content="">
+    <meta name="twitter:description" content="">
 
-	<meta itemprop="description" content="">
-	<meta itemprop="keywords" content="">
+    <meta itemprop="description" content="">
+    <meta itemprop="keywords" content="">
 
-	<meta name="description" content="">
-	<meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
 
     <link rel="stylesheet" href="../static/style.css">
-	<!-- favicon  -->
-	<link rel="shortcut icon" href="/common/images/favicon.ico">
-	<link rel="apple-touch-icon" href="/common/images/app_ico.png" sizes="144x144">
+    <!-- favicon  -->
+    <link rel="shortcut icon" href="/common/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/common/images/app_ico.png" sizes="144x144">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Where To Watch</title>
 </head>
 <body>
-    <div class="wrap">
-        <main role="main">
-            <section class="cont">
-                <div class="search">
-                    <div class="search-area">
-                        <h1>👩🏻‍💻 Where to watch?</h1>
-                        <form action="#">
-                            <fieldset>
-                                <div class="search-input">
-                                    <label for="title-search" class="hidden">검색</label>
-                                    <input type="text" name="title-search" id="title-search" placeholder="어떤 영화를 찾으세요?">
-                                    <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
-                                    <button type="submit" class="btn-search">🔍<span class="hidden">검색</span></button>
-                                </div>
-                                <div class="search-cont search-autocomplete">
-									<ul>
-                                        <li><button type="button" class="search-word"><span>test</span></button></li>
-                                    </ul>
-									<div class="search-cont-nodata" style="display: none;">
-										<p><strong>&quot;<span class="">test</span>&quot;</strong> 에 대한 검색 결과가 없습니다.</p>
-									</div>
-									<div class="search-cont-close">
-										<button type="button" class="search-btn-close">닫기</button>
-									</div>
-								</div>
-                            </fieldset>
-                        </form>
-                    </div>
+<div class="wrap">
+    <main role="main">
+        <section class="cont">
+            <div class="search">
+                <div class="search-area">
+                    <h1>👩🏻‍💻 Where to watch?</h1>
+                    <form action="#">
+                        <fieldset>
+                            <div class="search-input">
+                                <label for="search-title" class="hidden">검색</label>
+                                <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
+                                <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
+                                <button type="submit" class="btn-search">🔍<span class="hidden">검색</span></button>
+                            </div>
+                            <ul class="search-suggestions">
+
+                            </ul>
+                        </fieldset>
+                    </form>
                 </div>
-            </section>
-            <section class="cont">
-                <ul class="card-list">
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </section>
-        </main>
-    </div>
+            </div>
+        </section>
+        <section class="cont">
+            <ul class="card-list">
+                <li class="card">
+                    <a href="#">
+                        <div class="img-area">
+                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                        </div>
+                    </a>
+                </li>
+                <li class="card">
+                    <a href="#">
+                        <div class="img-area">
+                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                        </div>
+                    </a>
+                </li>
+                <li class="card">
+                    <a href="#">
+                        <div class="img-area">
+                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                        </div>
+                    </a>
+                </li>
+                <li class="card">
+                    <a href="#">
+                        <div class="img-area">
+                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                        </div>
+                    </a>
+                </li>
+                <li class="card">
+                    <a href="#">
+                        <div class="img-area">
+                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                        </div>
+                    </a>
+                </li>
+                <li class="card">
+                    <a href="#">
+                        <div class="img-area">
+                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </main>
+</div>
+<script>
+    let test;
+    $.ajax({
+        type: "GET",
+        url: "/search",
+        data: {},
+        success: function (response) {
+            if (response["result"] == "success") {
+                let filmLists = response['filmlists'];
+                let filmTitles = [];
+                for (let i = 0; i < filmLists.length; i++) {
+                    let filmList = filmLists[i];
+                    let filmTitle = filmList['title'];
+                    filmTitles.push(filmTitle);
+                }
+                test = filmTitles;
+            }
+        }
+    })
+    console.log(test);
+
+
+
+
+    //const endpoint =
+    //  "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+    //const cities = [];
+    // fetch(test)
+    //     //.then(blob => blob.json())
+    //     .then(data => cities.push(...data));
+
+    // function findMatches(wordToMatch, cities) {
+    //     return cities.filter(place => {
+    //         // here we need to figure out if the city or state matches what was searched
+    //         const regex = new RegExp(wordToMatch, "gi");
+    //         return place.city.match(regex) || place.state.match(regex);
+    //     });
+    // }
+    //
+    // function numberWithCommas(x) {
+    //     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // }
+    //
+    // function displayMatches() {
+    //     const matchArray = findMatches(this.value, cities);
+    //     const html = matchArray
+    //         .map(place => {
+    //             const regex = new RegExp(this.value, "gi");
+    //             const cityName = place.city.replace(
+    //                 regex,
+    //                 `<span class="hl">${this.value}</span>`
+    //             );
+    //             const stateName = place.state.replace(
+    //                 regex,
+    //                 `<span class="hl">${this.value}</span>`
+    //             );
+    //             return `
+    //                     <li>
+    //                       <span class="name">${cityName}, ${stateName}</span>
+    //                       <span class="population">${numberWithCommas(
+    //                 place.population
+    //             )}</span>
+    //                     </li>
+    //                   `;
+    //         })
+    //         .join("");
+    //     suggestions.innerHTML = html;
+    // }
+    //
+    // const searchInput = document.querySelector("#search-title");
+    // const suggestions = document.querySelector(".search-suggestions");
+    // searchInput.addEventListener("change", displayMatches);
+    // searchInput.addEventListener("keyup", displayMatches);
+</script>
 </body>
 </html>

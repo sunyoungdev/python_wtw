@@ -11,7 +11,7 @@ just_watch = JustWatch(country='KR')
 results_full = just_watch.search_for_item(
     providers=['nfx', 'prv', 'wav', 'wac', 'nvs', 'ply'],
     content_types=['movie'],
-    page_size=110
+    page_size=100
 )
 
 film_items = results_full['items']
