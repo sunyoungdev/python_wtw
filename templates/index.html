@@ -34,157 +34,137 @@
     <meta name="keywords" content="">
 
     <link rel="stylesheet" href="../static/style.css">
-    <!-- favicon  -->
+    <!-- favicon
     <link rel="shortcut icon" href="/common/images/favicon.ico">
     <link rel="apple-touch-icon" href="/common/images/app_ico.png" sizes="144x144">
-
+    -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Where To Watch</title>
 </head>
 <body>
-<div class="wrap">
-    <main role="main">
-        <section class="cont">
-            <div class="search">
-                <div class="search-area">
-                    <h1>👩🏻‍💻 Where to watch?</h1>
-                    <form action="#">
-                        <fieldset>
-                            <div class="search-input">
-                                <label for="search-title" class="hidden">검색</label>
-                                <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
-                                <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
-                                <button type="submit" class="btn-search">🔍<span class="hidden">검색</span></button>
-                            </div>
-                            <ul class="search-suggestions">
+    <div class="wrap">
+        <main role="main">
+            <section class="cont">
+                <div class="search">
+                    <div class="search-area">
+                        <h1>👩🏻‍💻 Where to watch?</h1>
+                        <form action="/search" method="GET">
+                            <fieldset>
+                                <div class="search-input">
+                                    <label for="search-title" class="hidden">검색</label>
+                                    <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
+                                    <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
+                                    <button type="submit" class="btn-search">🔍<span class="hidden">검색</span></button>
+                                </div>
+                                <ul class="search-suggestions">
 
-                            </ul>
-                        </fieldset>
-                    </form>
+                                </ul>
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </section>
-        <section class="cont">
-            <ul class="card-list">
-                <li class="card">
-                    <a href="#">
-                        <div class="img-area">
-                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="#">
-                        <div class="img-area">
-                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="#">
-                        <div class="img-area">
-                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="#">
-                        <div class="img-area">
-                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="#">
-                        <div class="img-area">
-                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                        </div>
-                    </a>
-                </li>
-                <li class="card">
-                    <a href="#">
-                        <div class="img-area">
-                            <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </section>
-    </main>
-</div>
-<script>
-    let test;
-    $.ajax({
-        type: "GET",
-        url: "/search",
-        data: {},
-        success: function (response) {
-            if (response["result"] == "success") {
-                let filmLists = response['filmlists'];
-                let filmTitles = [];
-                for (let i = 0; i < filmLists.length; i++) {
-                    let filmList = filmLists[i];
-                    let filmTitle = filmList['title'];
-                    filmTitles.push(filmTitle);
+            </section>
+            <section class="cont">
+                <ul class="card-list">
+                    <li class="card">
+                        <a href="#">
+                            <div class="img-area">
+                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="card">
+                        <a href="#">
+                            <div class="img-area">
+                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="card">
+                        <a href="#">
+                            <div class="img-area">
+                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="card">
+                        <a href="#">
+                            <div class="img-area">
+                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="card">
+                        <a href="#">
+                            <div class="img-area">
+                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="card">
+                        <a href="#">
+                            <div class="img-area">
+                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </div>
+    <script>
+        // function getSearchData() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/search",
+        //         data: {},
+        //         success: function (response) {
+        //             let filmLists = response['filmlists'];
+        //             findMatches(filmLists);
+        //         }
+        //     })
+        // }
+
+
+        // 검색어와 일치하는 영화 리스트 조회
+        function getSearchData() {
+            $.ajax({
+                type: "GET",
+                url: "/search",
+                data: {},
+                success: function (response) {
+                    let filmTitles = response['title_receive']
+                    console.log(filmTitles);
                 }
-                test = filmTitles;
-            }
+            })
         }
-    })
-    console.log(test);
+
+        // 검색한 것과 match 하는 결과의 path을 서버로 post
+        // function findMatches(wordToMatch, filmLists) {
+        //     return filmLists.filter(place => {
+        //         // here we need to figure out if the film title matches what was searched
+        //         const regex = new RegExp(wordToMatch, 'gi');
+        //         return place.title.match(regex)
+        //     })
+        //
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/search",
+        //         data: {'path_give': path},
+        //         success: function (response) {
+        //             if (response['result'] == 'success') {
+        //                 alert('검색 완료')
+        //                 window.location.reload()
+        //             }
+        //         }
+        //     });
+        // }
+
+        //
+
+        getSearchData();
 
 
-
-
-    //const endpoint =
-    //  "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
-    //const cities = [];
-    // fetch(test)
-    //     //.then(blob => blob.json())
-    //     .then(data => cities.push(...data));
-
-    // function findMatches(wordToMatch, cities) {
-    //     return cities.filter(place => {
-    //         // here we need to figure out if the city or state matches what was searched
-    //         const regex = new RegExp(wordToMatch, "gi");
-    //         return place.city.match(regex) || place.state.match(regex);
-    //     });
-    // }
-    //
-    // function numberWithCommas(x) {
-    //     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // }
-    //
-    // function displayMatches() {
-    //     const matchArray = findMatches(this.value, cities);
-    //     const html = matchArray
-    //         .map(place => {
-    //             const regex = new RegExp(this.value, "gi");
-    //             const cityName = place.city.replace(
-    //                 regex,
-    //                 `<span class="hl">${this.value}</span>`
-    //             );
-    //             const stateName = place.state.replace(
-    //                 regex,
-    //                 `<span class="hl">${this.value}</span>`
-    //             );
-    //             return `
-    //                     <li>
-    //                       <span class="name">${cityName}, ${stateName}</span>
-    //                       <span class="population">${numberWithCommas(
-    //                 place.population
-    //             )}</span>
-    //                     </li>
-    //                   `;
-    //         })
-    //         .join("");
-    //     suggestions.innerHTML = html;
-    // }
-    //
-    // const searchInput = document.querySelector("#search-title");
-    // const suggestions = document.querySelector(".search-suggestions");
-    // searchInput.addEventListener("change", displayMatches);
-    // searchInput.addEventListener("keyup", displayMatches);
-</script>
+    </script>
 </body>
 </html>
