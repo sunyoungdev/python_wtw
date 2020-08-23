@@ -34,11 +34,10 @@ def detail():
 # 검색어와 일치하는 영화 리스트 조회
 @app.route('/search', methods=['GET'])
 def find_matches():
-    title_receive = request.args.get('search-title')
-    match_array = list(db.film_list.find({'title': title_receive}, {'_id': False}))
+    title_receive = request.args.get('title_give')
+    #match_array = list(db.film_list.find({'title': title_receive}, {'_id': False}))
 
-    # return jsonify({'result': 'success', 'title_receive': title_receive})
-    return render_template('index.html')
+    return jsonify({'result': 'success', 'title_receive': title_receive})
 
 
 

@@ -48,19 +48,15 @@
                 <div class="search">
                     <div class="search-area">
                         <h1>👩🏻‍💻 Where to watch?</h1>
-                        <form action="/search" method="GET">
-                            <fieldset>
-                                <div class="search-input">
-                                    <label for="search-title" class="hidden">검색</label>
-                                    <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
-                                    <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
-                                    <button type="submit" class="btn-search">🔍<span class="hidden">검색</span></button>
-                                </div>
-                                <ul class="search-suggestions">
+                        <div class="search-input">
+                            <label for="search-title" class="hidden">검색</label>
+                            <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
+                            <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
+                            <button type="button" class="btn-search" onclick="getSearchData()">🔍<span class="hidden">검색</span></button>
+                        </div>
+                        <ul class="search-suggestions">
 
-                                </ul>
-                            </fieldset>
-                        </form>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -128,13 +124,17 @@
 
         // 검색어와 일치하는 영화 리스트 조회
         function getSearchData() {
+            let searchTitle = $("#search-title").val();
+
             $.ajax({
                 type: "GET",
                 url: "/search",
-                data: {},
+                data: {title_give: searchTitle},
                 success: function (response) {
-                    let filmTitles = response['title_receive']
-                    console.log(filmTitles);
+                    if (response["result"] == "success") {
+                        let filmTitles = response['title_receive']
+                        console.log(filmTitles);
+                    }
                 }
             })
         }
@@ -161,8 +161,6 @@
         // }
 
         //
-
-        getSearchData();
 
 
     </script>
