@@ -52,7 +52,8 @@
                             <label for="search-title" class="hidden">검색</label>
                             <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
                             <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
-                            <button type="button" class="btn-search" onclick="getSearchData()">🔍<span class="hidden">검색</span></button>
+                            <button type="button" class="btn-search" onclick="getSearchData()">🔍<span
+                                    class="hidden">검색</span></button>
                         </div>
                         <ul class="search-suggestions">
 
@@ -61,7 +62,7 @@
                 </div>
             </section>
             <section class="cont">
-                <ul class="card-list">
+                <ul class="card-list" id="searchList">
                     <li class="card">
                         <a href="#">
                             <div class="img-area">
@@ -131,36 +132,42 @@
                 url: "/search",
                 data: {title_give: searchTitle},
                 success: function (response) {
-                    if (response["result"] == "success") {
-                        let filmTitles = response['title_receive']
-                        console.log(filmTitles);
-                    }
+                    let matches = response['matches']
+                    console.log(matches);
                 }
             })
         }
 
-        // 검색한 것과 match 하는 결과의 path을 서버로 post
-        // function findMatches(wordToMatch, filmLists) {
-        //     return filmLists.filter(place => {
-        //         // here we need to figure out if the film title matches what was searched
-        //         const regex = new RegExp(wordToMatch, 'gi');
-        //         return place.title.match(regex)
-        //     })
-        //
+        // $(document).ready(function () {
+        //     $('#searchList').empty();
+        //     showSearchList();
+        // });
+
+        // function showSearchList() {
         //     $.ajax({
-        //         type: "POST",
-        //         url: "/search",
-        //         data: {'path_give': path},
+        //         type: "GET",
+        //         url: "/test",
+        //         data: {},
         //         success: function (response) {
-        //             if (response['result'] == 'success') {
-        //                 alert('검색 완료')
-        //                 window.location.reload()
+        //             if (response["result"] == "success") {
+        //                 let posterUrl = response['title_poster']
+        //                 let html = `
+        //                     <li class="card">
+        //                         <a href="#">
+        //                             <div class="img-area">
+        //                                 <img src="${posterUrl}">
+        //                             </div>
+        //                         </a>
+        //                     </li>
+        //                 `;
+        //
+        //                 $('#searchList').innerHTML(html);
+        //
         //             }
         //         }
-        //     });
+        //     })
         // }
 
-        //
 
 
     </script>

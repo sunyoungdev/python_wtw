@@ -2,11 +2,11 @@ from flask import Flask, render_template, jsonify, request
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+import json
+from bson import json_util
+
 
 app = Flask(__name__)
-
-# URL 별로 함수명이 같거나,
-# route('/') 등의 주소가 같으면 안됩니다.
 client = MongoClient('localhost', 27017)
 db = client.wtw
 
@@ -21,40 +21,33 @@ def detail():
     return render_template('detail.html')
 
 
-# @app.route('/search', methods=['GET'])
-# def get_filmlists():
-#     # 1. mongoDB에서 _id 값을 제외한 모든 데이터 조회해오기(Read)
-#     result = list(db.film_list.find({}, {'_id': 0}))
-#
-#     # 2. filmlists라는 키 값으로 filmlists 정보 보내주기
-#     return jsonify({'result': 'success', 'filmlists': result})
-
-
-
 # 검색어와 일치하는 영화 리스트 조회
 @app.route('/search', methods=['GET'])
 def find_matches():
     title_receive = request.args.get('title_give')
-    #match_array = list(db.film_list.find({'title': title_receive}, {'_id': False}))
+    # db에서 title_receive 값을 포함한 db만 조회
+    str = '.*' + title_receive + '.*'
+    matches = list(db.film_list.find({'title': {'$regex': str}}, {'_id': False}))
+    # print(list(matches))
+    return jsonify({'result': 'success', 'matches': matches})
+    # return json.dumps(matches, default=json_util.default)
 
-    return jsonify({'result': 'success', 'title_receive': title_receive})
 
-
-
-
-
-# 전달받은 path 값으로 poster url 크롤링
-# @app.route('/search', methods=['POST'])
+# path 값으로 poster url 크롤링
+# @app.route('/test', methods=['GET'])
 # def show_posters():
-#     path_receive = request.form['path_give']
-#     # 크롤링
+#     path = 'https://www.justwatch.com/kr/%EC%98%81%ED%99%94/1917'
 #
+#     # poster url 크롤링
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+#     data = requests.get(path, headers=headers)
+#     soup = BeautifulSoup(data.text, 'html.parser')
+#
+#     title_poster = soup.select_one('.title-poster > .title-poster__image')['src']
+#     print(title_poster)
 #     # posters 응답 데이터 보내주기
-#     return jsonify({'result': 'success', 'posters': posters})
-
-
-
-
+#     return jsonify({'result': 'success', 'posters': title_poster})
 
 
 if __name__ == '__main__':
