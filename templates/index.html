@@ -42,134 +42,107 @@
     <title>Where To Watch</title>
 </head>
 <body>
-    <div class="wrap">
-        <main role="main">
-            <section class="cont">
-                <div class="search">
-                    <div class="search-area">
-                        <h1>👩🏻‍💻 Where to watch?</h1>
-                        <div class="search-input">
-                            <label for="search-title" class="hidden">검색</label>
-                            <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
-                            <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
-                            <button type="button" class="btn-search" onclick="getSearchData()">🔍<span
-                                    class="hidden">검색</span></button>
-                        </div>
-                        <ul class="search-suggestions">
-
-                        </ul>
+<div class="wrap">
+    <main role="main">
+        <section class="cont">
+            <div class="search">
+                <div class="search-area">
+                    <h1>👩🏻‍💻 Where to watch?</h1>
+                    <div class="search-input">
+                        <label for="search-title" class="hidden">검색</label>
+                        <input type="text" name="search-title" id="search-title" placeholder="어떤 영화를 찾으세요?">
+                        <button type="button" class="btn-clear">❌<span class="hidden">삭제</span></button>
+                        <button type="button" class="btn-search" onclick="getMatches()">🔍<span
+                                class="hidden">검색</span></button>
                     </div>
+                    <ul class="search-suggestions">
+
+                    </ul>
                 </div>
-            </section>
-            <section class="cont">
-                <ul class="card-list" id="searchList">
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </section>
-        </main>
-    </div>
-    <script>
-        // function getSearchData() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/search",
-        //         data: {},
-        //         success: function (response) {
-        //             let filmLists = response['filmlists'];
-        //             findMatches(filmLists);
-        //         }
-        //     })
-        // }
+            </div>
+        </section>
+        <section class="cont">
+            <ul class="card-list" id="searchList" style="display: none">
+<!--                <li class="card">-->
+<!--                    <a href="#">-->
+<!--                        <div class="img-area">-->
+<!--                            <img src="https://picsum.photos/200/300?grayscale&blur=2">-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </li>-->
+            </ul>
+        </section>
+    </main>
+</div>
+<script>
+    $(document).ready(function () {
+        // showSearchList();
+    });
 
+    // 검색어와 일치하는 영화 리스트 조회
+    function getMatches() {
+        $('#searchList').empty().show();
 
-        // 검색어와 일치하는 영화 리스트 조회
-        function getSearchData() {
-            let searchTitle = $("#search-title").val();
+        // 검색 결과로 스크롤 다운
+        let offset = $('#searchList').offset();
+        $('html').animate({scrollTop : offset.top}, 400);
 
-            $.ajax({
-                type: "GET",
-                url: "/search",
-                data: {title_give: searchTitle},
-                success: function (response) {
-                    let matches = response['matches']
-                    console.log(matches);
+        let searchTitle = $("#search-title").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/search",
+            data: {title_give: searchTitle},
+            success: function (response) {
+                let matchList = response['match_list']
+
+                // 일치 영화 리스트 보여주기
+                for (let i = 0; i < matchList.length; i++) {
+                    let matchFilm = matchList[i];
+                    let filmId = matchFilm['id']
+                    let filmTitle = matchFilm['title']
+                    let posterUrl = matchFilm['poster_url']
+                    let temp = `
+                            <li class="card">
+                                <a href="/detail" onclick="showDetail(${filmId})" title="${filmTitle}">
+                                    <div class="img-area">
+                                        <img src="https://images.justwatch.com${posterUrl}">
+                                    </div>
+                                </a>
+                            </li>
+                        `;
+                    $('#searchList').append(temp);
                 }
-            })
+            }
+        })
+    }
+
+    // 검색 키다운
+    let searchInput = $('.search-input');
+    searchInput.on('keydown', function (k) {
+        if (k.keyCode === 13) {
+            getMatches();
         }
+    });
 
-        // $(document).ready(function () {
-        //     $('#searchList').empty();
-        //     showSearchList();
-        // });
+    // 디테일 페이지 요청
+    function showDetail(filmId) {
+        $.ajax({
+            type: "GET",
+            url: "/film_detail",
+            data: {id_give : filmId},
+            success: function (response) {
+                let infos = response['infos']
+                console.log(infos);
 
-        // function showSearchList() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/test",
-        //         data: {},
-        //         success: function (response) {
-        //             if (response["result"] == "success") {
-        //                 let posterUrl = response['title_poster']
-        //                 let html = `
-        //                     <li class="card">
-        //                         <a href="#">
-        //                             <div class="img-area">
-        //                                 <img src="${posterUrl}">
-        //                             </div>
-        //                         </a>
-        //                     </li>
-        //                 `;
-        //
-        //                 $('#searchList').innerHTML(html);
-        //
-        //             }
-        //         }
-        //     })
-        // }
+                // 디테일 영화 인포 보여주기
+
+            }
+        })
+    }
 
 
 
-    </script>
+</script>
 </body>
 </html>

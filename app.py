@@ -2,9 +2,6 @@ from flask import Flask, render_template, jsonify, request
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-import json
-from bson import json_util
-
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -14,7 +11,6 @@ db = client.wtw
 @app.route('/')
 def home():
     return render_template('index.html')
-
 
 @app.route('/detail')
 def detail():
@@ -27,10 +23,33 @@ def find_matches():
     title_receive = request.args.get('title_give')
     # db에서 title_receive 값을 포함한 db만 조회
     str = '.*' + title_receive + '.*'
-    matches = list(db.film_list.find({'title': {'$regex': str}}, {'_id': False}))
-    # print(list(matches))
-    return jsonify({'result': 'success', 'matches': matches})
-    # return json.dumps(matches, default=json_util.default)
+    matches = list(db.film_list.find({'title': {'$regex': str, '$options': 'i'}}, {'_id': False}))
+
+    # post url 가져오기
+    match_list = []
+    for match in matches:
+        id = match['id']
+        title = match['title']
+        poster = match['poster']
+        poster_url = poster.replace('{profile}', 's592')
+        doc = {
+            'id': id,
+            'title': title,
+            'poster_url': poster_url
+        }
+        match_list.append(doc)
+
+    return jsonify({'result': 'success', 'match_list': match_list})
+
+
+@app.route('/film_detail')
+def find_film_detail():
+    id_receive = request.args.get('id_give')
+
+    return jsonify({'result': 'success', 'match_list': id_receive})
+
+
+
 
 
 # path 값으로 poster url 크롤링

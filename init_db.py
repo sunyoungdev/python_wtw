@@ -21,15 +21,22 @@ for provider in providers:
             page_size=100
         )
         for film_item in results_full['items']:
-            id = film_item['id']
-            title = film_item['title']
-            if not (title in final_movie_names):
-                final_movie_names.append(title)
-                doc = {
-                    'id': id,
-                    'title': title,
-                }
-                db.film_list.insert_one(doc)
+            try:
+                id = film_item['id']
+                title = film_item['title']
+                poster = film_item['poster']
+                if not (title in final_movie_names):
+                    final_movie_names.append(title)
+                    doc = {
+                        'id': id,
+                        'title': title,
+                        'poster': poster
+                    }
+                    db.film_list.insert_one(doc, {'$ordered': False})
+                    # print(doc)
+            except Exception as ex:
+                print('에러가 발생 했습니다', ex)
+
 
 
 
