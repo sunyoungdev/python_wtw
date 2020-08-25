@@ -24,7 +24,7 @@ function getMatches() {
                 let posterUrl = matchFilm['poster_url']
                 let temp = `
                         <li class="card">
-                            <a href="/film_detail" onclick="showDetail(${filmId})" title="${filmTitle}">
+                            <a href="/film_detail?id_give=${filmId}" onclick="showDetail(${filmId})" title="${filmTitle}">
                                 <div class="img-area">
                                     <img src="https://images.justwatch.com${posterUrl}">
                                 </div>
@@ -54,7 +54,7 @@ function showDetail(filmId) {
         data: {id_give : filmId},
         success: function (response) {
             let infos = response['id_receive']
-            // console.log(infos);
+            console.log(infos);
             // 디테일 영화 인포 보여주기
 
         }
