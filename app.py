@@ -12,9 +12,10 @@ db = client.wtw
 def home():
     return render_template('index.html')
 
-@app.route('/detail')
-def detail():
-    return render_template('detail.html')
+
+# @app.route('/detail')
+# def detail():
+#     return render_template('detail.html')
 
 
 # 검색어와 일치하는 영화 리스트 조회
@@ -42,11 +43,16 @@ def find_matches():
     return jsonify({'result': 'success', 'match_list': match_list})
 
 
-@app.route('/film_detail')
+@app.route('/film_detail', methods=['GET'])
 def find_film_detail():
     id_receive = request.args.get('id_give')
+    print(id_receive)
+    return render_template('detail.html', id_receive=id_receive)
 
-    return jsonify({'result': 'success', 'match_list': id_receive})
+
+
+
+
 
 
 
