@@ -3,7 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import pprint
-from functools import reduce
+from operator import itemgetter
+import itertools
+
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -93,22 +95,71 @@ def find_film_detail():
     offers = infos['offers']
     monetizationType = {
         'buy': '구매',
-        'rent': '대여'
+        'rent': '대여',
+        'flatrate': '정액제'
     }
     providerType = {
         3: 'Google Play', 96: 'Naver', 356: 'Wavve', 8: 'Netflix', 97: 'Watcha', 119: 'Prime Video'
     }
 
     def get_filtered_offer(offer):
-        return {
-            'monetization_type': monetizationType[offer['monetization_type']],
-            'provider_name': providerType[offer['provider_id']],
-            'retail_price': offer['retail_price'],
-            'urls_standard_web': offer['urls']['standard_web']
-        }
+        if offer.get('retail_price') == None:
+            return {
+                'monetization_type': monetizationType[offer['monetization_type']],
+                'provider_num': offer['provider_id'],
+                'provider_name': providerType[offer['provider_id']],
+                'retail_price': '정액제',
+                'urls_standard_web': offer['urls']['standard_web']
+            }
+        else:
+            return {
+                'monetization_type': monetizationType[offer['monetization_type']],
+                'provider_num': offer['provider_id'],
+                'provider_name': providerType[offer['provider_id']],
+                'retail_price': offer['retail_price'],
+                'urls_standard_web': offer['urls']['standard_web']
+            }
 
-    filtered_offer = list(map(get_filtered_offer, offers))
+    filtering_offer = list(map(get_filtered_offer, offers))
+
+    # sorted offers by min price
+    filtered_offer = sorted(filtering_offer, key=itemgetter('provider_name'))
     # pprint.pprint(filtered_offer)
+
+    sorted_offer = []
+    for key, value in itertools.groupby(filtered_offer, key=itemgetter('provider_name')):
+        # print(key)
+        min_price = 1000000
+        for i in value:
+            if i['retail_price'] == '정액제':
+                sorted_offer.append(i)
+            elif i['retail_price'] < min_price:
+                min_price = i['retail_price']
+                sorted_offer.append(i)
+
+    # pprint.pprint(sorted_offer)
+
+    # 정액제만 있으면, 정액제 하나만
+    # 정액제+ 가격 --> 가격만
+
+
+
+
+
+
+
+    # Todo: get lowest price
+    # for idx in range(len(sorted_offer)):
+    #     min_price = 1000000
+    #     if sorted_offer[idx]['retail_price'] == '정액제':
+    #         pass
+    #     elif sorted_offer[idx]['retail_price'] < min_price:
+    #         min_price = i['retail_price']
+
+
+
+
+
 
     # description
     description = infos['short_description']
@@ -134,7 +185,7 @@ def find_film_detail():
         'genre': filtered_genre,
         'runtime': runtime,
         'score': imdb_score,
-        'offers': filtered_offer,
+        'offers': sorted_offer,
         'description': description,
         'actors': actors,
         'directors': directors

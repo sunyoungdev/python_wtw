@@ -82,38 +82,14 @@
                         <ul>
                             {% for offer in doc.offers %}
                             <li>
-                                <img src="../static/images/watcha.jpeg" alt="youtube">
+                                <img src="../static/images/{{offer.provider_num}}.jpeg" alt="youtube">
                                 <div>
                                     <strong>{{offer.provider_name}}</strong>
-                                    <span>₩{{offer.retail_price}}</span>
+                                    <span>최저 ₩{{offer.retail_price}}</span>
                                 </div>
-                                <a href="{{offer.urls_standard_web}}" class="link-watch" target="_blank">✔️ 보기</a>
+                                <a href="{{offer.urls_standard_web}}" class="link-watch" target="_blank">🎬 보기</a>
                             </li>
                             {% endfor %}
-<!--                            <li>-->
-<!--                                <img src="../static/images/watcha.jpeg" alt="youtube">-->
-<!--                                <div>-->
-<!--                                    <strong>넷플릭스</strong>-->
-<!--                                    <span>구독</span>-->
-<!--                                </div>-->
-<!--                                <a href="#" class="link-watch">🎬 보기</a>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <img src="../static/images/watcha.jpeg" alt="youtube">-->
-<!--                                <div>-->
-<!--                                    <strong>넷플릭스</strong>-->
-<!--                                    <span>구독</span>-->
-<!--                                </div>-->
-<!--                                <a href="#" class="link-watch">🍿 보기</a>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <img src="../static/images/watcha.jpeg" alt="youtube">-->
-<!--                                <div>-->
-<!--                                    <strong>넷플릭스</strong>-->
-<!--                                    <span>구독</span>-->
-<!--                                </div>-->
-<!--                                <a href="#" class="link-watch">🎥 보기</a>-->
-<!--                            </li>-->
                         </ul>
                     </div>
                     <div class="summary">
@@ -121,11 +97,15 @@
                         <div class="summary-item">
                             <dl>
                                 <dt>감독:</dt>
-                                <dd>{{doc.directors}}</dd>
+                                <dd>
+                                    {% for idx in range(doc.directors|length) %}{{doc.directors[idx]}}{% endfor %}
+                                </dd>
                             </dl>
                             <dl>
                                 <dt>출연진:</dt>
-                                <dd>{{doc.actors}}</dd>
+                                <dd>
+                                    {% for idx in range(doc.actors|length) %}{{doc.actors[idx]}}, {% endfor %}
+                                </dd>
                             </dl>
                         </div>
                     </div>
