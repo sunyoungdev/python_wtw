@@ -44,22 +44,23 @@
 <body>
     <div class="wrap">
         <main role="main">
-            ddd{{id_receive}}
             <section class="info">
                 <div class="info-img">
                     <div class="img-area">
-                        <img src="http://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2020/0206/20200206502916.jpg" alt="film title">
+                        <img src="{{doc.main_image_url}}" alt="{{doc.title}}">
                     </div>
                 </div>
                 <div class="info-tit">
-                    <h1>1917</h1>
+                    <h1>{{doc.title}} <span>({{doc.original_release_year}})</span></h1>
                     <div class="tit-sub">
-                        <span class="age">15</span>
-                        <span class="genre">전쟁/드라마</span>
-                        <span class="time">1시간 59분</span>
+<!--                        <span class="age">15</span>-->
+                        <span class="genre">
+                            {% for idx in range(doc.genre|length) %}<span>{{doc.genre[idx]}}</span>{% endfor %}
+                        </span>
+                        <span class="time">{{doc.runtime}}분</span>
                     </div>
                 </div>
-                <div class="info-rating">IMDb <span>8.3/10</span></div>
+                <div class="info-rating">IMDb <span>{{doc.score}}/10</span></div>
                 <div class="info-overview">
                     <ul class="options">
                         <li>
@@ -79,50 +80,52 @@
                     <div class="provider-list">
                         <h2>지금 감상하기</h2>
                         <ul>
+                            {% for offer in doc.offers %}
                             <li>
                                 <img src="../static/images/watcha.jpeg" alt="youtube">
                                 <div>
-                                    <strong>YouTube</strong>
-                                    <span>₩2,500</span>
+                                    <strong>{{offer.provider_name}}</strong>
+                                    <span>₩{{offer.retail_price}}</span>
                                 </div>
-                                <a href="#" class="link-watch">✔️ 보기</a>
+                                <a href="{{offer.urls_standard_web}}" class="link-watch" target="_blank">✔️ 보기</a>
                             </li>
-                            <li>
-                                <img src="../static/images/watcha.jpeg" alt="youtube">
-                                <div>
-                                    <strong>넷플릭스</strong>
-                                    <span>구독</span>
-                                </div>
-                                <a href="#" class="link-watch">🎬 보기</a>
-                            </li>
-                            <li>
-                                <img src="../static/images/watcha.jpeg" alt="youtube">
-                                <div>
-                                    <strong>넷플릭스</strong>
-                                    <span>구독</span>
-                                </div>
-                                <a href="#" class="link-watch">🍿 보기</a>
-                            </li>
-                            <li>
-                                <img src="../static/images/watcha.jpeg" alt="youtube">
-                                <div>
-                                    <strong>넷플릭스</strong>
-                                    <span>구독</span>
-                                </div>
-                                <a href="#" class="link-watch">🎥 보기</a>
-                            </li>
+                            {% endfor %}
+<!--                            <li>-->
+<!--                                <img src="../static/images/watcha.jpeg" alt="youtube">-->
+<!--                                <div>-->
+<!--                                    <strong>넷플릭스</strong>-->
+<!--                                    <span>구독</span>-->
+<!--                                </div>-->
+<!--                                <a href="#" class="link-watch">🎬 보기</a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <img src="../static/images/watcha.jpeg" alt="youtube">-->
+<!--                                <div>-->
+<!--                                    <strong>넷플릭스</strong>-->
+<!--                                    <span>구독</span>-->
+<!--                                </div>-->
+<!--                                <a href="#" class="link-watch">🍿 보기</a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <img src="../static/images/watcha.jpeg" alt="youtube">-->
+<!--                                <div>-->
+<!--                                    <strong>넷플릭스</strong>-->
+<!--                                    <span>구독</span>-->
+<!--                                </div>-->
+<!--                                <a href="#" class="link-watch">🎥 보기</a>-->
+<!--                            </li>-->
                         </ul>
                     </div>
                     <div class="summary">
-                        <div class="summary-txt">《1917》은 2019년 개봉한 영국, 미국의 서사 전쟁 영화로, 샘 멘데스 감독이 연출하고, 크리스티 윌슨케언스와 같이 각본을 썼다. 제1차 세계 대전을 배경으로, 독일군의 함정에 빠진 아군을 구하기 위해 적진을 뚫고 달려가는 두 영국 병사가 하루 동안 겪는 사투를 그린 영화이다.</div>
+                        <div class="summary-txt">{{doc.description}}</div>
                         <div class="summary-item">
                             <dl>
                                 <dt>감독:</dt>
-                                <dd>샘 멘데스</dd>
+                                <dd>{{doc.directors}}</dd>
                             </dl>
                             <dl>
                                 <dt>출연진:</dt>
-                                <dd>Dean-Charles Chapman, George MacKay, Daniel Mays ..</dd>
+                                <dd>{{doc.actors}}</dd>
                             </dl>
                         </div>
                     </div>
