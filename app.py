@@ -148,6 +148,7 @@ def find_film_detail():
 
 
 
+
     # Todo: get lowest price
     # for idx in range(len(sorted_offer)):
     #     min_price = 1000000
