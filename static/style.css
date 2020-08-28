@@ -44,7 +44,7 @@ h1{font-size: 30px;}
 .info-overview .options li{display: inline-block;width: 50%;vertical-align: top;}
 .info-overview .options li a{display: inline-block;}
 .info-overview .options li .option-img{width: 60px;height: 60px;margin: 0 auto;padding: 15px;border: 1px solid #efefef;border-radius: 50%;}
-.info-overview .options li em{display: block;margin: 5px 0 0;font-size: 16px;}
+.info-overview .options li em{display: block;margin: 8px 0 0;font-size: 16px;}
 .info-overview .options li span{font-size: 14px;}
 .info-overview .provider-list h2{margin-bottom: 15px;font-size: 20px;}
 .info-overview .provider-list li{display:flex;padding: 10px 0;align-items: center;}

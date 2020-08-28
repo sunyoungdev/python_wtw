@@ -64,10 +64,14 @@
                 <div class="info-overview">
                     <ul class="options">
                         <li>
-                            <a href="#">
-                                <div class="option-img"><img src="../static/images/watcha.jpeg" alt="title 지금 보기"></div>
+                            <a href="{{doc.lowest_offer[0].urls_standard_web}}" title="{{doc.title}} 지금 보기">
+                                <div class="option-img"><img src="../static/images/{{doc.lowest_offer[0].provider_num}}.jpeg" alt="{{doc.lowest_offer[0].provider_name}}"></div>
                                 <em>지금 보기</em>
-                                <span>₩2,500</span>
+                                {% if doc.lowest_offer[0].retail_price == '정액제' %}
+                                <span>{{doc.lowest_offer[0].retail_price}}</span>
+                                {% elif doc.lowest_offer[0].retail_price != '정액제' %}
+                                <span>₩{{doc.lowest_offer[0].retail_price}}</span>
+                                {% endif %}
                             </a>
                         </li>
                         <li>
@@ -85,7 +89,11 @@
                                 <img src="../static/images/{{offer.provider_num}}.jpeg" alt="youtube">
                                 <div>
                                     <strong>{{offer.provider_name}}</strong>
+                                    {% if offer.retail_price == '정액제' %}
+                                    <span>{{offer.retail_price}}</span>
+                                    {% elif offer.retail_price != '정액제' %}
                                     <span>최저 ₩{{offer.retail_price}}</span>
+                                    {% endif %}
                                 </div>
                                 <a href="{{offer.urls_standard_web}}" class="link-watch" target="_blank">🎬 보기</a>
                             </li>

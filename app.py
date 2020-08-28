@@ -1,11 +1,10 @@
 from flask import Flask, render_template, jsonify, request
 import requests
-from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import pprint
 from operator import itemgetter
 import itertools
-
+import copy
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -128,39 +127,53 @@ def find_film_detail():
 
     sorted_offer = []
     for key, value in itertools.groupby(filtered_offer, key=itemgetter('provider_name')):
-        # print(key)
-        min_price = 1000000
-        for i in value:
-            if i['retail_price'] == '정액제':
-                sorted_offer.append(i)
-            elif i['retail_price'] < min_price:
-                min_price = i['retail_price']
-                sorted_offer.append(i)
+        offer_group = list(value)
 
+        # 모두 정액제 인지
+        is_all_flatrate = True
+        for offer in offer_group:
+            if offer['retail_price'] != '정액제':
+                is_all_flatrate = False
+                break
+        # 모두 가격제 인지
+        is_all_var_rate = True
+        for offer in offer_group:
+            if offer['retail_price'] == '정액제':
+                is_all_var_rate = False
+                break
+        # 모두 정액제면 -> 첫번째 오퍼만 저장
+        if is_all_flatrate and not is_all_var_rate:
+            sorted_offer.append(offer_group[0])
+        # 모두 가격제면 -> 가격 비교
+        elif not is_all_flatrate and is_all_var_rate:
+            min_price = 1000000
+            for offer in offer_group:
+                if offer['retail_price'] < min_price:
+                    min_price = offer['retail_price']
+                    sorted_offer.append(offer)
+        # 가격제 + 정액제면 -> 정액제 제거해서 가격비교
+        elif not is_all_flatrate and not is_all_var_rate:
+            copy_offer_group = copy.deepcopy(offer_group)
+            for offer in offer_group:
+                if offer['retail_price'] == '정액제':
+                    copy_offer_group.remove(offer)
+            min_price = 1000000
+            for offer in copy_offer_group:
+                if offer['retail_price'] < min_price:
+                    min_price = offer['retail_price']
+                    sorted_offer.append(offer)
     # pprint.pprint(sorted_offer)
 
-    # 정액제만 있으면, 정액제 하나만
-    # 정액제+ 가격 --> 가격만
-
-
-
-
-
-
-
-
     # Todo: get lowest price
-    # for idx in range(len(sorted_offer)):
-    #     min_price = 1000000
-    #     if sorted_offer[idx]['retail_price'] == '정액제':
-    #         pass
-    #     elif sorted_offer[idx]['retail_price'] < min_price:
-    #         min_price = i['retail_price']
-
-
-
-
-
+    lowest_offer = []
+    min_price = 1000000
+    for offer in sorted_offer:
+        if offer['retail_price'] == '정액제':
+            lowest_offer.append(offer)
+        elif offer['retail_price'] < min_price:
+            min_price = offer['retail_price']
+            lowest_offer.append(offer)
+    # print(lowest_offer)
 
     # description
     description = infos['short_description']
@@ -187,10 +200,13 @@ def find_film_detail():
         'runtime': runtime,
         'score': imdb_score,
         'offers': sorted_offer,
+        'lowest_offer': lowest_offer,
         'description': description,
         'actors': actors,
         'directors': directors
     }
+    print(sorted_offer)
+    # print(lowest_offer)
 
     return render_template('detail.html', doc=doc)
 
