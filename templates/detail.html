@@ -60,7 +60,19 @@
                         <span class="time">{{doc.runtime}}분</span>
                     </div>
                 </div>
-                <div class="info-rating">IMDb <span>{{doc.score}}/10</span></div>
+                <div class="info-rating">
+                    {% for score in doc.scores %}
+
+                    {% if score.provider_type == 'imdb:score' %}
+                        IMDb <span>{{score.value}}/10</span>
+                        {% break %}
+                    {% elif score.provider_type == 'tmdb:score' %}
+                        TMDb <span>{{score.value}}/10</span>
+                        {% break %}
+                    {% endif %}
+
+                    {% endfor %}
+                </div>
                 <div class="info-overview">
                     <ul class="options">
                         <li>
@@ -75,8 +87,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <div class="option-img"><img src="../static/images/ico_wish.png" alt="관심 목록 추가"></div>
+                            <a href="#wishList" class="add-wishlist" data-id="{{doc.id}}" data-poster="{{doc.poster}}" data-title="{{doc.title}}">
+                                <div class="option-img"><img class="wishlist-icon" src="../static/images/icon_wish.png" alt="관심 목록 추가"></div>
                                 <em>관심 목록</em>
                             </a>
                         </li>
@@ -120,50 +132,15 @@
                 </div>
                 <div class="info-wishlist">
                     <h3>WISHLIST</h3>
-                    <ul class="card-list">
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="card">
-                        <a href="#">
-                            <div class="img-area">
-                                <img src="https://picsum.photos/200/300?grayscale&blur=2">
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                    <ul class="card-list" id="wishList">
+<!--                        <li class="card">-->
+<!--                            <a href="#">-->
+<!--                                <div class="img-area">-->
+<!--                                    <img src="https://picsum.photos/200/300?grayscale&blur=2">-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                        </li>-->
+                    </ul>
                 </div>
             </section>
         </main>

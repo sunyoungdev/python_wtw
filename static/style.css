@@ -26,13 +26,16 @@ h1{font-size: 30px;}
 .search-input .btn-search{right: 10px;}
 
 .card-list{font-size: 0;}
-.card{display: inline-block;width: 22%;margin: 5% 1.5% 0;}
+.card{position: relative; display: inline-block;width: 22%;margin: 5% 1.5% 0;}
+.card a:after{opacity:0;visibility:hidden;content: '';position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(255,255,255,.3);transition: all ease .3s}
+.card a:hover:after, .card a:active:after, .card a:focus:after{opacity: 1;visibility: visible;}
 
 .img-area{position: relative;overflow: hidden;}
 .img-area img{position: relative;top: 0;left: 50%;width: 100%;max-width: 100%;transform: translate(-50%,0);}
 .info-img .img-area{height: 300px;}
 
 .info [class^='info-']{padding:15px;border-bottom: 1px solid #efefef;}
+.info h2, .info h3{font-size: 20px;margin-bottom: 15px;}
 .info .info-img{padding: 0;}
 .info .info-tit .tit-sub {margin: 3px 0;font-size: 14px;}
 .info .info-tit .tit-sub .genre span:after{content:'ㆍ';display: inline-block;}
@@ -46,7 +49,6 @@ h1{font-size: 30px;}
 .info-overview .options li .option-img{width: 60px;height: 60px;margin: 0 auto;padding: 15px;border: 1px solid #efefef;border-radius: 50%;}
 .info-overview .options li em{display: block;margin: 8px 0 0;font-size: 16px;}
 .info-overview .options li span{font-size: 14px;}
-.info-overview .provider-list h2{margin-bottom: 15px;font-size: 20px;}
 .info-overview .provider-list li{display:flex;padding: 10px 0;align-items: center;}
 .info-overview .provider-list li > img{width: 40px;}
 .info-overview .provider-list li > div{flex: 3;padding: 0 15px;}
@@ -59,9 +61,15 @@ h1{font-size: 30px;}
 .info-overview .summary-item dt{float: left; width: 55px;font-weight: bold;vertical-align: top;}
 .info-overview .summary-item dd{float: left; width: calc(100% - 60px);}
 .info-overview .summary-item .actors dd{height: 40px;overflow: hidden;display: -webkit-box;text-overflow: ellipsis;-webkit-line-clamp: 2;-webkit-box-orient: vertical;word-wrap:break-word;}
-.info-wishlist h3{font-size: 20px;margin-bottom: 14px;}
 .info-wishlist .card{margin-top: 0;margin-bottom: 15px;}
 
-@media screen and (max-width:480px){
-    .info-img .img-area{height: 46.875vw;}
+@media screen and (max-width:590px){
+    body{font-size: 14px;line-height: 1.2;}
+    h1{font-size: 24px}
+    .info h2, .info h3{font-size: 17px;margin-bottom: 13px;}
+    .info-img .img-area{height: 50.847vw;}
+    .info-overview .options li .option-img{width: 50px;height: 50px;margin: 0 auto;padding: 10px;}
+    .info-overview .options li em{margin: 6px 0 0;font-size: 14px;}
+    .info-overview .options li span{font-size: 12px;}
+    .info-overview .summary-item .actors dd{height: 32px;}
 }

@@ -1,8 +1,9 @@
 from flask import Flask, render_template, jsonify, request
 import requests
 from pymongo import MongoClient
-import itertools
+import pprint
 from operator import itemgetter
+import itertools
 import copy
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -10,6 +11,9 @@ db = client.wtw
 @app.route('/')
 def home():
     return render_template('index.html')
+# @app.route('/detail')
+# def detail():
+#     return render_template('detail.html')
 # 검색어와 일치하는 영화 리스트 조회
 @app.route('/search', methods=['GET'])
 def find_matches():
@@ -20,7 +24,6 @@ def find_matches():
     # post url 가져오기
     match_list = []
     for match in matches:
-        print(match)
         id = match['id']
         title = match['title']
         poster = match['poster']
@@ -36,15 +39,18 @@ def find_matches():
 def find_film_detail():
     id_receive = request.args.get('id_give')
     film_full_url = 'https://apis.justwatch.com/content/titles/movie/' + id_receive + '/locale/ko_KR'
+    # print(film_full_url)
     proxies = {'http': None, 'https': None}
     response_data = requests.get(film_full_url, proxies=proxies)
     infos = response_data.json()
     # 메인 이미지 주소
     main_image = infos['backdrops'][0]['backdrop_url'].replace('{profile}', 's1440')
     main_image_url = 'https://images.justwatch.com' + main_image
+    # print(main_image_url)
     # 타이틀, 개봉연도
     title = infos['title']
     original_release_year = infos['original_release_year']
+    # print(title, original_release_year)
     # 장르 텍스트로 변환
     genre_ids = infos['genre_ids']
     genre_type = {
@@ -54,72 +60,102 @@ def find_film_detail():
     def get_filtered_genre(genre_id):
         return genre_type[genre_id]
     filtered_genre = list(map(get_filtered_genre, genre_ids))
+    # print(filtered_genre)
     # 런타임
     runtime = infos['runtime']
+    # print(runtime)
     # 스코어링
     scores = infos['scoring']
     for idx in range(len(scores)):
         if scores[idx]['provider_type'] == 'imdb:score':
             imdb_score = scores[idx]['value']
+            # print(imdb_score)
     # offer by provider
     offers = infos['offers']
     monetizationType = {
         'buy': '구매',
-        'rent': '대여'
+        'rent': '대여',
+        'flatrate': '정액제'
     }
     providerType = {
         3: 'Google Play', 96: 'Naver', 356: 'Wavve', 8: 'Netflix', 97: 'Watcha', 119: 'Prime Video'
     }
     def get_filtered_offer(offer):
-        return {
-            'monetization_type': monetizationType[offer['monetization_type']],
-            'provider_name': providerType[offer['provider_id']],
-            'retail_price': offer['retail_price'],
-            'urls_standard_web': offer['urls']['standard_web']
-        }
-    filtered_offer = list(map(get_filtered_offer, offers))
-    films = sorted(filtered_offer, key=itemgetter('provider_name'))
-    ########################################################################################################################
-    movie_result_list = []
-    for key, value in itertools.groupby(films, key=itemgetter('provider_name')):
-        movie_list = list(value)
+        if offer.get('retail_price') == None:
+            return {
+                'monetization_type': monetizationType[offer['monetization_type']],
+                'provider_num': offer['provider_id'],
+                'provider_name': providerType[offer['provider_id']],
+                'retail_price': '정액제',
+                'urls_standard_web': offer['urls']['standard_web']
+            }
+        else:
+            return {
+                'monetization_type': monetizationType[offer['monetization_type']],
+                'provider_num': offer['provider_id'],
+                'provider_name': providerType[offer['provider_id']],
+                'retail_price': offer['retail_price'],
+                'urls_standard_web': offer['urls']['standard_web']
+            }
+    filtering_offer = list(map(get_filtered_offer, offers))
+    # sorted offers by min price
+    filtered_offer = sorted(filtering_offer, key=itemgetter('provider_name'))
+    print('-------', filtered_offer)
+    sorted_offer = []
+    for key, value in itertools.groupby(filtered_offer, key=itemgetter('provider_name')):
+        offer_group = list(value)
+        print('', key, offer_group)
         # 모두 정액제 인지
-        is_all_fix_price = True
-        for movie in movie_list:
-            if movie['retail_price'] != '정액제':
-                is_all_fix_price = False
+        is_all_flatrate = True
+        for offer in offer_group:
+            if offer['retail_price'] != '정액제':
+                is_all_flatrate = False
                 break
-        # 모두 가격제인지
-        is_all_change_price = True
-        for movie in movie_list:
-            if movie['retail_price'] == '정액제':
-                is_all_change_price = False
+        # 모두 가격제 인지
+        is_all_var_rate = True
+        for offer in offer_group:
+            if offer['retail_price'] == '정액제':
+                is_all_var_rate = False
                 break
-        # 모두 정액제 이면, 첫번재 영화만 저장
-        if is_all_fix_price and not is_all_change_price:
-            movie_result_list.append(movie_list[0])
-        # 모두 가격제 이면, 가격 비교
-        elif not is_all_fix_price and is_all_change_price:
-            min_price = 100000000
-            for movie in movie_list:
-                if movie['retail_price'] < min_price:
-                    min_price = movie['retail_price']
-                    movie_result_list.append(movie)
-        # 가격제 + 정액제 이면, 정액제 제거해서 가격비교
-        elif not is_all_fix_price and not is_all_change_price:
-            copy_movies = copy.deepcopy(movie_list)
-            for movie in movie_list:
-                if movie['retail_price'] == '정액제':
-                    copy_movies.remove(movie)
-            min_price = 100000000
-            for movie in copy_movies:
-                if movie['retail_price'] < min_price:
-                    min_price = movie['retail_price']
-                    movie_result_list.append(movie)
-    print(movie_result_list)
-    ########################################################################################################################
+        # 모두 정액제면 -> 첫번째 오퍼만 저장
+        if is_all_flatrate and not is_all_var_rate:
+            sorted_offer.append(offer_group[0])
+        # 모두 가격제면 -> 가격 비교
+        elif not is_all_flatrate and is_all_var_rate:
+            min_price = 1000000
+            result_index = -1
+            for idx, offer in enumerate(offer_group):
+                if offer['retail_price'] < min_price:
+                    min_price = offer['retail_price']
+                    result_index = idx
+            sorted_offer.append(offer_group[result_index])
+        # 가격제 + 정액제면 -> 정액제 제거해서 가격비교
+        elif not is_all_flatrate and not is_all_var_rate:
+            copy_offer_group = copy.deepcopy(offer_group)
+            for offer in offer_group:
+                if offer['retail_price'] == '정액제':
+                    copy_offer_group.remove(offer)
+            result_index = -1
+            min_price = 1000000
+            for idx, offer in enumerate(copy_offer_group):
+                if offer['retail_price'] < min_price:
+                    min_price = offer['retail_price']
+                    result_index = idx
+            sorted_offer.append(copy_offer_group[result_index])
+    # pprint.pprint(sorted_offer)
+    # Todo: get lowest price
+    lowest_offer = []
+    min_price = 1000000
+    for offer in sorted_offer:
+        if offer['retail_price'] == '정액제':
+            lowest_offer.append(offer)
+        elif offer['retail_price'] < min_price:
+            min_price = offer['retail_price']
+            lowest_offer.append(offer)
+    # print(lowest_offer)
     # description
     description = infos['short_description']
+    # print(description)
     # credits(감독/배우)
     credits = infos['credits']
     actors = []
@@ -129,6 +165,8 @@ def find_film_detail():
             actors.append(credit['name'])
         elif credit['role'] == 'DIRECTOR':
             directors.append(credit['name'])
+    # print(actors)
+    # print(directors)
     doc = {
         'main_image_url': main_image_url,
         'title': title,
@@ -136,11 +174,13 @@ def find_film_detail():
         'genre': filtered_genre,
         'runtime': runtime,
         'score': imdb_score,
-        'offers': movie_result_list,
+        'offers': sorted_offer,
+        'lowest_offer': lowest_offer,
         'description': description,
         'actors': actors,
         'directors': directors
     }
+    # print(lowest_offer)
     return render_template('detail.html', doc=doc)
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

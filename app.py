@@ -7,6 +7,8 @@ import itertools
 import copy
 
 app = Flask(__name__)
+# Jinja2 environment add extension
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 client = MongoClient('localhost', 27017)
 db = client.wtw
 
@@ -35,7 +37,7 @@ def find_matches():
         id = match['id']
         title = match['title']
         poster = match['poster']
-        poster_url = poster.replace('{profile}', 's592')
+        poster_url = poster.replace('{profile}', 's332')
         doc = {
             'id': id,
             'title': title,
@@ -55,6 +57,10 @@ def find_film_detail():
     proxies = {'http': None, 'https': None}
     response_data = requests.get(film_full_url, proxies=proxies)
     infos = response_data.json()
+
+    # 포스터 주소
+    poster = infos['poster']
+    poster_url = poster.replace('{profile}', 's332')
 
     # 메인 이미지 주소
     main_image = infos['backdrops'][0]['backdrop_url'].replace('{profile}', 's1440')
@@ -85,10 +91,11 @@ def find_film_detail():
 
     # 스코어링
     scores = infos['scoring']
-    for idx in range(len(scores)):
-        if scores[idx]['provider_type'] == 'imdb:score':
-            imdb_score = scores[idx]['value']
-            # print(imdb_score)
+    # for idx in range(len(scores)):
+    #     if scores[idx]['provider_type'] == 'imdb:score':
+    #         imdb_score = scores[idx]['value']
+    #     elif scores[idx]['provider_type'] == 'tmdb:score':
+    #         tmdb_score = scores[idx]['value']
 
     # offer by provider
     offers = infos['offers']
@@ -123,12 +130,11 @@ def find_film_detail():
 
     # sorted offers by min price
     filtered_offer = sorted(filtering_offer, key=itemgetter('provider_name'))
-    # pprint.pprint(filtered_offer)
-
+    print('-------', filtered_offer)
     sorted_offer = []
     for key, value in itertools.groupby(filtered_offer, key=itemgetter('provider_name')):
         offer_group = list(value)
-
+        print('', key, offer_group)
         # 모두 정액제 인지
         is_all_flatrate = True
         for offer in offer_group:
@@ -147,21 +153,25 @@ def find_film_detail():
         # 모두 가격제면 -> 가격 비교
         elif not is_all_flatrate and is_all_var_rate:
             min_price = 1000000
-            for offer in offer_group:
+            result_index = -1
+            for idx, offer in enumerate(offer_group):
                 if offer['retail_price'] < min_price:
                     min_price = offer['retail_price']
-                    sorted_offer.append(offer)
+                    result_index = idx
+            sorted_offer.append(offer_group[result_index])
         # 가격제 + 정액제면 -> 정액제 제거해서 가격비교
         elif not is_all_flatrate and not is_all_var_rate:
             copy_offer_group = copy.deepcopy(offer_group)
             for offer in offer_group:
                 if offer['retail_price'] == '정액제':
                     copy_offer_group.remove(offer)
+            result_index = -1
             min_price = 1000000
-            for offer in copy_offer_group:
+            for idx, offer in enumerate(copy_offer_group):
                 if offer['retail_price'] < min_price:
                     min_price = offer['retail_price']
-                    sorted_offer.append(offer)
+                    result_index = idx
+            sorted_offer.append(copy_offer_group[result_index])
     # pprint.pprint(sorted_offer)
 
     # Todo: get lowest price
@@ -193,20 +203,21 @@ def find_film_detail():
     # print(directors)
 
     doc = {
+        'id': id_receive,
+        'poster': poster_url,
         'main_image_url': main_image_url,
         'title': title,
         'original_release_year': original_release_year,
         'genre': filtered_genre,
         'runtime': runtime,
-        'score': imdb_score,
+        'scores': scores,
         'offers': sorted_offer,
         'lowest_offer': lowest_offer,
         'description': description,
         'actors': actors,
         'directors': directors
     }
-    print(sorted_offer)
-    # print(lowest_offer)
+    # pprint.pprint(doc)
 
     return render_template('detail.html', doc=doc)
 
