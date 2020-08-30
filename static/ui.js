@@ -98,20 +98,20 @@ const makeWishlist = function () {
        // console.log(localStorage.getItem(localStorage.key(i)));
        let saved = localStorage.getItem(localStorage.key(i));
        console.log(saved)
-       // if (saved) {
-       //      for (let i = 0; i < saved.length; i++){
-       //          let temp = `
-       //                  <li class="card">
-       //                      <a href="/film_detail?id_give=${saved.id}" onclick="showDetail(${saved.id})" title="${saved.title}">
-       //                          <div class="img-area">
-       //                              <img src="https://images.justwatch.com${saved.poster}">
-       //                          </div>
-       //                      </a>
-       //                  </li>
-       //              `;
-       //          $('#wishList').append(temp);
-       //      }
-       //  }
+       if (saved != null && saved.length != 0) {
+            for (let i = 0; i < saved.length; i++){
+                let temp = `
+                        <li class="card">
+                            <a href="/film_detail?id_give=${saved[i].id}" onclick="showDetail(${saved[i].id})" title="${saved[i].title}">
+                                <div class="img-area">
+                                    <img src="https://images.justwatch.com${saved[i].poster}">
+                                </div>
+                            </a>
+                        </li>
+                    `;
+                $('#wishList').append(temp);
+            }
+        }
     }
 
     // let saved = localStorage.getItem('wishlistItems');
