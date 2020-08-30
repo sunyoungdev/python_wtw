@@ -1,3 +1,8 @@
+// 초기 진입 시 포커스
+$(document).ready(function () {
+    $("#search-title").focus();
+});
+
 // 검색어와 일치하는 영화 리스트 조회
 function getMatches() {
     $('#searchList').empty().show();
@@ -71,11 +76,9 @@ const makeWishlist = function () {
     const $wishTitle = $wishBtn.data('title');
     const $this = $(this);
 
-    $wishBtn.on('click', function () {
+    $wishBtn.on('click', function (e) {
+        e.preventDefault();
         if ($wishBtn.hasClass('active') === false) {
-            $wishBtn.addClass('active');
-            $('.wishlist-icon').attr('src', '../static/images/icon_wish_on.png');
-
             let wishlists = {
                 id : $wishId,
                 poster : $wishPoster,
@@ -97,41 +100,26 @@ const makeWishlist = function () {
     for(let i =0; i < localStorage.length; i++){
        // console.log(localStorage.getItem(localStorage.key(i)));
        let saved = localStorage.getItem(localStorage.key(i));
+       saved = JSON.parse(saved)
        console.log(saved)
        if (saved != null && saved.length != 0) {
-            for (let i = 0; i < saved.length; i++){
-                let temp = `
-                        <li class="card">
-                            <a href="/film_detail?id_give=${saved[i].id}" onclick="showDetail(${saved[i].id})" title="${saved[i].title}">
-                                <div class="img-area">
-                                    <img src="https://images.justwatch.com${saved[i].poster}">
-                                </div>
-                            </a>
-                        </li>
-                    `;
-                $('#wishList').append(temp);
-            }
+            let temp = `
+                    <li class="card">
+                        <a href="/film_detail?id_give=${saved.id}" onclick="showDetail(${saved.id})" title="${saved.title}">
+                            <div class="img-area">
+                                <img src="https://images.justwatch.com${saved.poster}">
+                            </div>
+                        </a>
+                    </li>
+                `;
+            $('#wishList').append(temp);
+        }
+        // saved wishlist film active
+        if (saved.id == $wishId) {
+            $wishBtn.addClass('active');
+            $('.wishlist-icon').attr('src', '../static/images/icon_wish_on.png');
         }
     }
-
-    // let saved = localStorage.getItem('wishlistItems');
-    // console.log(saved)
-    // // If there are any saved items, update our list
-    // if (saved) {
-    //     for (let i = 0; i < saved.length; i++){
-    //         let temp = `
-    //                 <li class="card">
-    //                     <a href="/film_detail?id_give=${$wishId}" onclick="showDetail(${$wishId})" title="${$wishTitle}">
-    //                         <div class="img-area">
-    //                             <img src="https://images.justwatch.com${$wishPoster}">
-    //                         </div>
-    //                     </a>
-    //                 </li>
-    //             `;
-    //         $('#wishList').append(temp);
-    //     }
-    // }
-
 }
 
 searchScrollDown();

@@ -5,6 +5,9 @@ import pprint
 from operator import itemgetter
 import itertools
 import copy
+import schedule
+from init_db import get_film_db
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 # Jinja2 environment add extension
@@ -16,11 +19,6 @@ db = client.wtw
 @app.route('/')
 def home():
     return render_template('index.html')
-
-
-# @app.route('/detail')
-# def detail():
-#     return render_template('detail.html')
 
 
 # 검색어와 일치하는 영화 리스트 조회
@@ -48,11 +46,12 @@ def find_matches():
     return jsonify({'result': 'success', 'match_list': match_list})
 
 
+# 영화 상세 정보 조회
 @app.route('/film_detail', methods=['GET'])
 def find_film_detail():
+    # id 값 넣어 api requests 하기
     id_receive = request.args.get('id_give')
     film_full_url = 'https://apis.justwatch.com/content/titles/movie/' + id_receive + '/locale/ko_KR'
-    # print(film_full_url)
 
     proxies = {'http': None, 'https': None}
     response_data = requests.get(film_full_url, proxies=proxies)
@@ -176,13 +175,15 @@ def find_film_detail():
 
     # Todo: get lowest price
     lowest_offer = []
+    result_index = -1
     min_price = 1000000
-    for offer in sorted_offer:
+    for idx, offer in enumerate(sorted_offer):
         if offer['retail_price'] == '정액제':
             lowest_offer.append(offer)
         elif offer['retail_price'] < min_price:
             min_price = offer['retail_price']
-            lowest_offer.append(offer)
+            result_index = idx
+        lowest_offer.append(sorted_offer[result_index])
     # print(lowest_offer)
 
     # description
@@ -221,6 +222,12 @@ def find_film_detail():
 
     return render_template('detail.html', doc=doc)
 
+
+# 매주 토요일 밤 10시 업데이트
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(get_film_db, 'cron', minute="15", hour="16", day_of_week="sun")
+sched.start()
+# schedule.every().saturday.at("22:00").do(get_film_db)
 
 
 if __name__ == '__main__':
