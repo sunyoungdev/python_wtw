@@ -6,8 +6,8 @@ from operator import itemgetter
 import itertools
 import copy
 import schedule
-from init_db import get_film_db
 from apscheduler.schedulers.background import BackgroundScheduler
+from init_db import get_film_db
 
 app = Flask(__name__)
 # Jinja2 environment add extension
@@ -223,10 +223,11 @@ def find_film_detail():
     return render_template('detail.html', doc=doc)
 
 
-# 매주 토요일 밤 10시 업데이트
+# 매주 1회 db 업데이트
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(get_film_db, 'cron', minute="15", hour="16", day_of_week="sun")
+sched.add_job(get_film_db, 'cron', minute="02", hour="17", day_of_week="sun")
 sched.start()
+
 # schedule.every().saturday.at("22:00").do(get_film_db)
 
 
