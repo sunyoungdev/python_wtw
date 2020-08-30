@@ -129,11 +129,11 @@ def find_film_detail():
 
     # sorted offers by min price
     filtered_offer = sorted(filtering_offer, key=itemgetter('provider_name'))
-    print('-------', filtered_offer)
+    # print('-------', filtered_offer)
     sorted_offer = []
     for key, value in itertools.groupby(filtered_offer, key=itemgetter('provider_name')):
         offer_group = list(value)
-        print('', key, offer_group)
+        # print('', key, offer_group)
         # 모두 정액제 인지
         is_all_flatrate = True
         for offer in offer_group:
@@ -225,7 +225,7 @@ def find_film_detail():
 
 # 매주 1회 db 업데이트
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(get_film_db, 'cron', minute="02", hour="17", day_of_week="sun")
+sched.add_job(get_film_db, 'cron', minute="38", hour="18", day_of_week="sun")
 sched.start()
 
 # schedule.every().saturday.at("22:00").do(get_film_db)
