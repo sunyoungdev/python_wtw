@@ -12,7 +12,7 @@ from init_db import get_film_db
 app = Flask(__name__)
 # Jinja2 environment add extension
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://sunyoungdev:sunyoung12!@3.34.95.220', 27017)
 db = client.wtw
 
 
@@ -225,7 +225,7 @@ def find_film_detail():
 
 # 매주 1회 db 업데이트
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(get_film_db, 'cron', minute="38", hour="18", day_of_week="sun")
+sched.add_job(get_film_db, 'cron', minute="24", hour="22", day_of_week="sun")
 sched.start()
 
 # schedule.every().saturday.at("22:00").do(get_film_db)

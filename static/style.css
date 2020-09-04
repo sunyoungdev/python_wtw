@@ -18,7 +18,7 @@ body{font-family: '맑은 고딕', 'malgun gothic', 'AppleGothicNeoSD', 'Apple S
 .cont{width: 100%;padding: 0 1.5%;}
 main .cont:first-child, #searchList{height: 100vh;}
 .search{position: relative;top: 40%;text-align: center;}
-h1{font-size: 30px;}
+h1,h2{font-size: 30px;}
 .search-input{position: relative;max-width: 400px;width: 100%;height: 60px;margin: 0 auto;margin-top: 15px;line-height: 60px;}
 .search-input input{width: 100%;height: 100%;padding: 0 60px;border: 1px solid #ddd;border-radius: 30px;}
 .search-input [class^='btn-']{position: absolute;top: 10px;width: 40px;height: 40px;text-align: center;}
@@ -30,12 +30,15 @@ h1{font-size: 30px;}
 .card a:after{opacity:0;visibility:hidden;content: '';position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(255,255,255,.3);transition: all ease .3s}
 .card a:hover:after, .card a:active:after, .card a:focus:after{opacity: 1;visibility: visible;}
 
+header{border-bottom: 1px solid #efefef;text-align: center;}
+header h1{height: 60px;line-height: 60px;}
+
 .img-area{position: relative;overflow: hidden;}
 .img-area img{position: relative;top: 0;left: 50%;width: 100%;max-width: 100%;transform: translate(-50%,0);}
 .info-img .img-area{height: 300px;}
 
 .info [class^='info-']{padding:15px;border-bottom: 1px solid #efefef;}
-.info h2, .info h3{font-size: 20px;margin-bottom: 15px;}
+.info h3{font-size: 20px;margin-bottom: 15px;}
 .info .info-img{padding: 0;}
 .info .info-tit .tit-sub {margin: 3px 0;font-size: 14px;}
 .info .info-tit .tit-sub .genre span:after{content:'ㆍ';display: inline-block;}
@@ -65,7 +68,8 @@ h1{font-size: 30px;}
 
 @media screen and (max-width:590px){
     body{font-size: 14px;line-height: 1.2;}
-    h1{font-size: 24px}
+    h1,h2{font-size: 24px}
+    header h1{height: 40px;line-height: 40px;}
     .info h2, .info h3{font-size: 17px;margin-bottom: 13px;}
     .info-img .img-area{height: 50.847vw;}
     .info-overview .options li .option-img{width: 50px;height: 50px;margin: 0 auto;padding: 10px;}

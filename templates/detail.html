@@ -6,32 +6,32 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="title" content="Where To Watch">
-	<link rel="canonical" href="#">
+    <link rel="canonical" href="#">
 
-	<meta property="og:site_name" content="Where To Watch">
-	<meta property="og:type" content="website">
-	<meta name="twitter:card" content="summary">
+    <meta property="og:site_name" content="Where To Watch">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
 
-	<meta itemprop="url" content="#">
-	<meta property="og:url" content="#">
-	<meta name="twitter:url" content="#">
+    <meta itemprop="url" content="http://wheretowatch.shop/">
+    <meta property="og:url" content="http://wheretowatch.shop/">
+    <meta name="twitter:url" content="http://wheretowatch.shop/">
 
-	<meta itemprop="image" content="{{ url_for('static', filename='og_image.png') }}">
-	<meta property="og:image" content="{{ url_for('static', filename='og_image.png') }}">
-	<meta name="twitter:image" content="{{ url_for('static', filename='og_image.png') }}">
+    <meta itemprop="image" content="{{ url_for('static', filename='images/og_image.png') }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og_image.png') }}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/og_image.png') }}">
 
-	<meta itemprop="name" content="Where To Watch">
-	<meta property="og:title" content="Where To Watch">
-	<meta name="twitter:title" content="Where To Watch">
+    <meta itemprop="name" content="Where To Watch">
+    <meta property="og:title" content="Where To Watch">
+    <meta name="twitter:title" content="Where To Watch">
 
-	<meta property="og:description" content="">
-	<meta name="twitter:description" content="">
+    <meta property="og:description" content="보고싶은 그 영화, Where to watch?">
+    <meta name="twitter:description" content="보고싶은 그 영화, Where to watch?">
 
-	<meta itemprop="description" content="">
-	<meta itemprop="keywords" content="">
+    <meta itemprop="description" content="보고싶은 그 영화, Where to watch?">
+    <meta itemprop="keywords" content="보고싶은 그 영화, Where to watch?">
 
-	<meta name="description" content="">
-	<meta name="keywords" content="">
+    <meta name="description" content="보고싶은 그 영화, Where to watch?">
+    <meta name="keywords" content="보고싶은 그 영화, Where to watch?">
 
     <link rel="stylesheet" href="../static/style.css">
 	<!-- favicon
@@ -43,6 +43,9 @@
 </head>
 <body>
     <div class="wrap">
+        <header>
+            <h1><a href="index.html" title="홈으로 이동">👩🏻‍💻</a></h1>
+        </header>
         <main role="main">
             <section class="info">
                 <div class="info-img">
@@ -51,7 +54,7 @@
                     </div>
                 </div>
                 <div class="info-tit">
-                    <h1>{{doc.title}} <span>({{doc.original_release_year}})</span></h1>
+                    <h2>{{doc.title}} <span>({{doc.original_release_year}})</span></h2>
                     <div class="tit-sub">
 <!--                        <span class="age">15</span>-->
                         <span class="genre">
@@ -94,7 +97,7 @@
                         </li>
                     </ul>
                     <div class="provider-list">
-                        <h2>지금 감상하기</h2>
+                        <h3>지금 감상하기</h3>
                         <ul>
                             {% for offer in doc.offers %}
                             <li>

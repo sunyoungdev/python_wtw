@@ -62,6 +62,7 @@ function showDetail(filmId) {
         success: function (response) {
             let infos = response['id_receive']
             console.log(infos);
+
             // 디테일 영화 인포 보여주기
 
         }

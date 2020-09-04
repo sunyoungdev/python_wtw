@@ -1,7 +1,8 @@
 from justwatch import JustWatch
 from pymongo import MongoClient
 
-client = MongoClient('localhost', 27017)
+# client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://sunyoungdev:sunyoung12!@3.34.95.220', 27017)
 db = client.wtw
 just_watch = JustWatch(country='KR')
 
@@ -12,7 +13,7 @@ just_watch = JustWatch(country='KR')
 
 def get_film_db():
     # 기존 콜렉션 삭제
-    # db.film_list.drop()
+    db.film_list.drop()
 
     # db 추출
     saved_film_titles = []
