@@ -7,7 +7,7 @@ import itertools
 import copy
 import schedule
 from apscheduler.schedulers.background import BackgroundScheduler
-from init_db import get_film_db
+# from init_db import get_film_db
 
 app = Flask(__name__)
 # Jinja2 environment add extension
@@ -53,8 +53,11 @@ def find_film_detail():
     id_receive = request.args.get('id_give')
     film_full_url = 'https://apis.justwatch.com/content/titles/movie/' + id_receive + '/locale/ko_KR'
 
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'
+    }
     proxies = {'http': None, 'https': None}
-    response_data = requests.get(film_full_url, proxies=proxies)
+    response_data = requests.get(film_full_url, headers=headers)
     infos = response_data.json()
 
     # 포스터 주소
@@ -224,9 +227,9 @@ def find_film_detail():
 
 
 # 매주 1회 db 업데이트
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(get_film_db, 'cron', minute="24", hour="22", day_of_week="sun")
-sched.start()
+# sched = BackgroundScheduler(daemon=True)
+# sched.add_job(get_film_db, 'cron', minute="24", hour="22", day_of_week="sun")
+# sched.start()
 
 # schedule.every().saturday.at("22:00").do(get_film_db)
 

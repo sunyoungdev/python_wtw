@@ -5,14 +5,21 @@ $(document).ready(function () {
 
 // 검색어와 일치하는 영화 리스트 조회
 function getMatches() {
+    let searchTitle = $("#search-title").val();
+    let offset = $('#searchList').offset();
+
+    // 검색 결과 섹션 비우기
     $('#searchList').empty().show();
 
+    // 검색어 예외 처리
+    // if (searchTitle == null){
+    //
+    // }
+
     // 검색 결과로 스크롤 다운
-    let offset = $('#searchList').offset();
     $('html').animate({scrollTop: offset.top}, 400);
-
-    let searchTitle = $("#search-title").val();
-
+    
+    // 검색어 보내기
     $.ajax({
         type: "GET",
         url: "/search",
