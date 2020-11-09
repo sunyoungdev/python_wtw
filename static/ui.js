@@ -6,46 +6,60 @@ $(document).ready(function () {
 // 검색어와 일치하는 영화 리스트 조회
 function getMatches() {
     let searchTitle = $("#search-title").val();
-    let offset = $('#searchList').offset();
-
-    // 검색 결과 섹션 비우기
-    $('#searchList').empty().show();
 
     // 검색어 예외 처리
-    // if (searchTitle == null){
-    //
-    // }
+    if (searchTitle == ""){
+        alert('검색어를 입력하세요');
+        return false;
+    } else {
+        // 검색어 보내기
+        $.ajax({
+            type: "GET",
+            url: "/search",
+            data: {title_give: searchTitle},
+            success: function (response) {
+                let matchList = response['match_list']
 
-    // 검색 결과로 스크롤 다운
-    $('html').animate({scrollTop: offset.top}, 400);
-    
-    // 검색어 보내기
-    $.ajax({
-        type: "GET",
-        url: "/search",
-        data: {title_give: searchTitle},
-        success: function (response) {
-            let matchList = response['match_list']
+                if (matchList == ""){
+                    $('#searchList').hide();
+                    $('.nodata').show();
 
-            // 일치 영화 리스트 보여주기
-            for (let i = 0; i < matchList.length; i++) {
-                let matchFilm = matchList[i];
-                let filmId = matchFilm['id']
-                let filmTitle = matchFilm['title']
-                let posterUrl = matchFilm['poster_url']
-                let temp = `
-                        <li class="card">
-                            <a href="/film_detail?id_give=${filmId}" onclick="showDetail(${filmId})" title="${filmTitle}">
-                                <div class="img-area">
-                                    <img src="https://images.justwatch.com${posterUrl}">
-                                </div>
-                            </a>
-                        </li>
-                    `;
-                $('#searchList').append(temp);
+                    let nodataOffset = $('.nodata').offset();
+                    $('html').animate({scrollTop: nodataOffset.top}, 400);
+
+                    return false;
+                } else{
+                    // 검색 결과 섹션 비우기
+                    $('.nodata').hide();
+                    $('#searchList').empty().show();
+
+                    // 검색 결과로 스크롤 다운
+                    let searchListOffset = $('#searchList').offset();
+                    $('html').animate({scrollTop: searchListOffset.top}, 400);
+
+                    // 일치 영화 리스트 보여주기
+                    for (let i = 0; i < matchList.length; i++) {
+                        let matchFilm = matchList[i];
+                        let filmId = matchFilm['id']
+                        let filmTitle = matchFilm['title']
+                        let posterUrl = matchFilm['poster_url']
+                        let temp = `
+                                <li class="card">
+                                    <a href="/film_detail?id_give=${filmId}" onclick="showDetail(${filmId})" title="${filmTitle}">
+                                        <div class="img-area">
+                                            <img src="https://images.justwatch.com${posterUrl}">
+                                        </div>
+                                    </a>
+                                </li>
+                            `;
+                        $('#searchList').append(temp);
+                    }
+                }
             }
-        }
-    })
+        })
+    }
+
+
 }
 
 // 검색 키다운
